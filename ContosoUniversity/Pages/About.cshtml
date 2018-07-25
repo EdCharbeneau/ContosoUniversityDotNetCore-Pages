@@ -8,25 +8,28 @@
 
 <h2>Student Body Statistics</h2>
 
-<table>
-    <tr>
-        <th>
-            Enrollment Date
-        </th>
-        <th>
-            Students
-        </th>
-    </tr>
-
-    @foreach (var item in Model.Data)
-    {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.EnrollmentDate)
-            </td>
-            <td>
-                @item.StudentCount
-            </td>
-        </tr>
-    }
-</table>
+<kendo-chart deferred="true" name="StudentBodyStats" theme="Bootstrap">
+    <chart-title text="Total Enrollments per Year"></chart-title>
+    <series>
+        <series-item category-field="EnrollmentDate" field="StudentCount" type="ChartSeriesType.Column" data="Model.Data" />
+    </series>
+    <value-axis>
+        <value-axis-item type="numeric" major-unit="1">
+        </value-axis-item>
+    </value-axis>
+    <category-axis>
+        <category-axis-item base-unit="ChartAxisBaseUnit.Years" type="ChartCategoryAxisType.Date">
+            <major-grid-lines visible="false" />
+        </category-axis-item>
+    </category-axis>
+    <datasource>
+        <schema data="Model.Data">
+            <model>
+                <fields>
+                    <field name="EnrollmentDate" type="date" />
+                    <field name="StudentCount" type="number" />
+                </fields>
+            </model>
+        </schema>
+    </datasource>
+</kendo-chart>
