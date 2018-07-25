@@ -8,12 +8,25 @@
     <environment include="Development">
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
         <link rel="stylesheet" href="~/css/site.css" />
+        <link rel="stylesheet" href="~/lib/kendo-ui/styles/kendo.common-bootstrap.min.css" />
+        <link rel="stylesheet" href="~/lib/kendo-ui/styles/kendo.bootstrap.min.css" />
     </environment>
     <environment exclude="Development">
         <link rel="stylesheet" href="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/css/bootstrap.min.css"
               asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
               asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
         <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
+        <link rel="stylesheet"
+              href="https://kendo.cdn.telerik.com/2017.2.621/styles/kendo.common-bootstrap.min.css"
+              asp-fallback-href="~/lib/kendo-ui/styles/kendo.common-bootstrap.min.css"
+              asp-fallback-test-class="k-common-test-class"
+              asp-fallback-test-property="opacity" asp-fallback-test-value="0" />
+
+        <link rel="stylesheet"
+              href="https://kendo.cdn.telerik.com/2017.2.621/styles/kendo.bootstrap.min.css"
+              asp-fallback-href="~/lib/kendo-ui/styles/kendo.bootstrap.min.css"
+              asp-fallback-test-class="k-theme-test-class"
+              asp-fallback-test-property="opacity" asp-fallback-test-value="0" />
     </environment>
 </head>
 <body>
@@ -53,6 +66,9 @@
         <script src="~/lib/jquery/dist/jquery.js"></script>
         <script src="~/lib/lodash/dist/lodash.js"></script>
         <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+        @* Place Kendo UI scripts after jQuery *@
+        <script src="~/lib/kendo-ui/js/kendo.all.min.js"></script>
+        <script src="~/lib/kendo-ui/js/kendo.aspnetmvc.min.js"></script>
         <script src="~/js/site.js" asp-append-version="true"></script>
     </environment>
     <environment exclude="Development">
@@ -69,9 +85,27 @@
                 integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa">
         </script>
         <script src="~/lib/lodash/dist/lodash.min.js"></script>
+        <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.2.0.min.js"
+                asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
+                asp-fallback-test="window.jQuery"
+                crossorigin="anonymous"
+                integrity="sha384-K+ctZQ+LL8q6tP7I94W+qzQsfRV2a+AfHIi9k8z8l9ggpc8X+Ytst4yBo/hH+8Fk">
+        </script>
+
+        @*  Place Kendo UI scripts after jQuery *@
+        <script src="https://kendo.cdn.telerik.com/2017.2.621/js/kendo.all.min.js"
+                asp-fallback-src="~/lib/kendo-ui/js/kendo.all.min.js"
+                asp-fallback-test="window.kendo">
+        </script>
+        <script src="https://kendo.cdn.telerik.com/2017.2.621/js/kendo.aspnetmvc.min.js"
+                asp-fallback-src="~/lib/kendo-ui/js/kendo.aspnetmvc.min.js"
+                asp-fallback-test="kendo.data.transports['aspnetmvc-ajax']">
+        </script>
         <script src="~/js/site.min.js" asp-append-version="true"></script>
     </environment>
 
+    @Html.Kendo().DeferredScripts()
     @RenderSection("Scripts", false)
+
 </body>
 </html>

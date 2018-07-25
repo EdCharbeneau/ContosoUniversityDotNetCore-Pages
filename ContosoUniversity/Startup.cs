@@ -11,6 +11,7 @@ using HtmlTags;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json.Serialization;
 
 namespace ContosoUniversity
 {
@@ -43,15 +44,18 @@ namespace ContosoUniversity
                     opt.Filters.Add(typeof(ValidatorPageFilter));
                     opt.ModelBinderProviders.Insert(0, new EntityModelBinderProvider());
                 })
+                .AddJsonOptions(jsonOpt => jsonOpt.SerializerSettings.ContractResolver = new DefaultContractResolver())
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
                 .AddFluentValidation(cfg => { cfg.RegisterValidatorsFromAssemblyContaining<Startup>(); });
+
+            services.AddKendo();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             app.UseMiniProfiler();
-            
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
