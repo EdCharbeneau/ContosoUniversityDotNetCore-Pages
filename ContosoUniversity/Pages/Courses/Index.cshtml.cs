@@ -6,7 +6,10 @@ using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using ContosoUniversity.Data;
 using ContosoUniversity.Models;
+using Kendo.Mvc.UI;
+using Kendo.Mvc.Extensions;
 using MediatR;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 
@@ -20,15 +23,18 @@ namespace ContosoUniversity.Pages.Courses
 
         public Result Data { get; private set; }
 
-        public async Task OnGetAsync() => Data = await _mediator.Send(new Query());
+        public void OnGetAsync() { }
+        public async Task<JsonResult> OnGetCourses_Read([DataSourceRequest]DataSourceRequest request) => new JsonResult(await _mediator.Send(new Query(request)));
 
-        public class Query : IRequest<Result>
+        public class Query : IRequest<DataSourceResult>
         {
+            public Query(DataSourceRequest request) => dataSourceRequest = request;
+            public DataSourceRequest dataSourceRequest { get; set; }
         }
 
         public class Result
         {
-            public List<Course> Courses { get; set; }
+            //public DataSourceResult Courses { get; set; }
 
             public class Course
             {
@@ -44,7 +50,7 @@ namespace ContosoUniversity.Pages.Courses
             public MappingProfile() => CreateMap<Course, Result.Course>();
         }
 
-        public class Handler : IRequestHandler<Query, Result>
+        public class Handler : IRequestHandler<Query, DataSourceResult>
         {
             private readonly SchoolContext _db;
             private readonly IConfigurationProvider _configuration;
@@ -55,16 +61,11 @@ namespace ContosoUniversity.Pages.Courses
                 _configuration = configuration;
             }
 
-            public async Task<Result> Handle(Query message, CancellationToken token)
+            public async Task<DataSourceResult> Handle(Query message, CancellationToken token)
             {
-                var courses = await _db.Courses
-                    .OrderBy(d => d.Id)
-                    .ProjectToListAsync<Result.Course>(_configuration);
+                var courses = await _db.Courses.ProjectTo<Result.Course>(_configuration).ToDataSourceResultAsync(message.dataSourceRequest);
 
-                return new Result
-                {
-                    Courses = courses
-                };
+                return courses;
             }
         }
     }

@@ -51,10 +51,10 @@
             };
             await InsertAsync(englishDept, historyDept, english, history);
 
-            var result = await SendAsync(new Index.Query());
+            var result = await SendAsync(new Index.Query(new Kendo.Mvc.UI.DataSourceRequest()));
 
             result.ShouldNotBeNull();
-            result.Courses.Count.ShouldBeGreaterThanOrEqualTo(2);
+            result.Total.ShouldBeGreaterThanOrEqualTo(2);
         }
     }
 }

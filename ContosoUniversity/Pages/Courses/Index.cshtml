@@ -1,4 +1,5 @@
 ﻿@page
+@using System.Dynamic
 @model Courses.Index
 
 @{
@@ -10,48 +11,30 @@
 <p>
     <a asp-page="Create">Create New</a>
 </p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                Number
-            </th>
-            <th>
-                Title
-            </th>
-            <th>
-                Credits
-            </th>
-            <th>
-                Department
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @{ int i = 0;}
-        @foreach (var item in Model.Data.Courses)
-        {
-            <tr>
-                <td>
-                    <display-tag for="Data.Courses[i].Id"/>
-                </td>
-                <td>
-                    <display-tag for="Data.Courses[i].Title" />
-                </td>
-                <td>
-                    <display-tag for="Data.Courses[i].Credits" />
-                </td>
-                <td>
-                    <display-tag for="Data.Courses[i].DepartmentName" />
-                </td>
-                <td>
-                    <a asp-page="Edit" asp-route-id="@item.Id">Edit</a> |
-                    <a asp-page="Details" asp-route-id="@item.Id">Details</a> |
-                    <a asp-page="Delete" asp-route-id="@item.Id">Delete</a>
-                </td>
-            </tr>
-            i++;
-        }
-    </tbody>
-</table>
+<kendo-grid name="grid" height="550" deferred="true">
+    <datasource page="1" server-paging="true" type="DataSourceTagHelperType.Ajax" page-size="2">
+        <schema data="Data">
+            <model>
+                <fields>
+                    <field name="Id" type="number" />
+                    <field name="Credits" type="number" />
+                </fields>
+            </model>
+        </schema>
+        <transport >
+            <read  url="?handler=Courses_Read" type="GET"/>
+        </transport>
+    </datasource>
+    <groupable enabled="true" />
+    <sortable enabled="true" />
+    <pageable button-count="5"  refresh="true" page-sizes="new int[] { 2, 10, 20 }">
+    </pageable>
+    <filterable enabled="true" />
+    <columns>
+        <column field="Title" title="Title" />
+        <column field="Id" />
+        <column field="Credits"  />
+        <column field="DepartmentName" />
+        <column field="Id" title="Action" template="<a href='/Courses/Edit/#= Id #'>Edit</a> | <a href='/Courses/Details/#= Id #'>Details</a> | <a href='/Courses/Delete/#= Id #'>Delete</a>"></column>
+    </columns>
+</kendo-grid>
