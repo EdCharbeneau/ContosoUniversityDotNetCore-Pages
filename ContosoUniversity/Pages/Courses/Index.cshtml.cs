@@ -24,7 +24,7 @@ namespace ContosoUniversity.Pages.Courses
         public Result Data { get; private set; }
 
         public void OnGetAsync() { }
-        public async Task<JsonResult> OnGetCourses_Read([DataSourceRequest]DataSourceRequest request) => new JsonResult(await _mediator.Send(new Query(request)));
+        public async Task<JsonResult> OnGetCourses_Read([FromQuery, DataSourceRequest]DataSourceRequest request) => new JsonResult(await _mediator.Send(new Query(request)));
 
         public class Query : IRequest<DataSourceResult>
         {
@@ -34,8 +34,6 @@ namespace ContosoUniversity.Pages.Courses
 
         public class Result
         {
-            //public DataSourceResult Courses { get; set; }
-
             public class Course
             {
                 public int Id { get; set; }

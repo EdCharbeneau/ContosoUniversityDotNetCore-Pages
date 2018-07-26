@@ -1,5 +1,4 @@
 ﻿@page
-@using System.Dynamic
 @model Courses.Index
 
 @{
@@ -12,7 +11,7 @@
     <a asp-page="Create">Create New</a>
 </p>
 <kendo-grid name="grid" height="550" deferred="true">
-    <datasource page="1" server-paging="true" type="DataSourceTagHelperType.Ajax" page-size="2">
+    <datasource server-paging="true" type="DataSourceTagHelperType.Ajax">
         <schema data="Data">
             <model>
                 <fields>
@@ -21,19 +20,19 @@
                 </fields>
             </model>
         </schema>
-        <transport >
-            <read  url="?handler=Courses_Read" type="GET"/>
+        <transport parameter-map="function(data, operation){console.log('map')}">
+            <read url="?handler=Courses_Read" type="GET" />
         </transport>
     </datasource>
     <groupable enabled="true" />
     <sortable enabled="true" />
-    <pageable button-count="5"  refresh="true" page-sizes="new int[] { 2, 10, 20 }">
+    <pageable button-count="5" refresh="true" page-size="5">
     </pageable>
     <filterable enabled="true" />
     <columns>
         <column field="Title" title="Title" />
         <column field="Id" />
-        <column field="Credits"  />
+        <column field="Credits" />
         <column field="DepartmentName" />
         <column field="Id" title="Action" template="<a href='/Courses/Edit/#= Id #'>Edit</a> | <a href='/Courses/Details/#= Id #'>Details</a> | <a href='/Courses/Delete/#= Id #'>Delete</a>"></column>
     </columns>
