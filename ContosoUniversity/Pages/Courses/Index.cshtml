@@ -7,10 +7,10 @@
 
 <h2>Courses</h2>
 
-<p>
-    <a asp-page="Create">Create New</a>
-</p>
 <kendo-grid name="grid" height="550" deferred="true">
+    <toolbar>
+        <toolbar-button name="CreateNew" template="gridToolbar"/>
+    </toolbar>
     <datasource server-paging="true" type="DataSourceTagHelperType.Ajax">
         <schema data="Data">
             <model>
@@ -20,20 +20,48 @@
                 </fields>
             </model>
         </schema>
-        <transport parameter-map="function(data, operation){console.log('map')}">
+        <transport>
             <read url="?handler=Courses_Read" type="GET" />
         </transport>
     </datasource>
-    <groupable enabled="true" />
     <sortable enabled="true" />
     <pageable button-count="5" refresh="true" page-size="5">
     </pageable>
     <filterable enabled="true" />
     <columns>
-        <column field="Title" title="Title" />
         <column field="Id" />
+        <column field="Title" title="Title">
+            <filterable multi="true" />
+        </column>
         <column field="Credits" />
-        <column field="DepartmentName" />
-        <column field="Id" title="Action" template="<a href='/Courses/Edit/#= Id #'>Edit</a> | <a href='/Courses/Details/#= Id #'>Details</a> | <a href='/Courses/Delete/#= Id #'>Delete</a>"></column>
+        <column field="DepartmentName">
+            <filterable multi="true" />
+        </column>
+        <column field="Id" title="Actions">
+            <columns>
+                <column field="Id" title=" " width="96" template="<a class='k-button k-primary' href='/Courses/Edit/#= Id #'>Edit</a>">
+                    <filterable enabled="false" />
+                    <sortable enabled="false" />
+                </column>
+                <column field="Id" title=" "  width="96" template="<a class='k-button k-secondary' href='/Courses/Details/#= Id #'>Details</a>">
+                    <filterable enabled="false" />
+                    <sortable enabled="false" />
+                </column>
+                <column field="Id" title=" "  width="96" template="<a class='k-button k-secondary' href='/Courses/Delete/#= Id #'>Delete</a>">
+                    <filterable enabled="false" />
+                    <sortable enabled="false" />
+                </column>
+            </columns>
+        </column>
+
     </columns>
 </kendo-grid>
+
+@section scripts {
+    <script id="gridToolbarTemplate" type="text/x-kendo-template">
+        <a class="k-button k-primary" href="/Courses/Create">Create New</a>
+    </script>
+    <script>
+        var gridToolbar = kendo.template($("#gridToolbarTemplate").html());
+    </script>
+}
